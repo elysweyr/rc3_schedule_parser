@@ -27,11 +27,14 @@ class RC3TalkParser():
     def __scrub_german_locales(self, date) -> str:
         return date.replace("Januar", "January").replace("Februar", "February").replace("März", "March").replace("Mai", "May").replace("Juni", "June").replace("Juli", "July").replace("Oktober", "October").replace("Dezember", "December")
 
+    def __scrub_date(self, date) -> str:
+        return date.replace(".", "").replace(",", "").replace("noon", "12:00").replace("midnight", "00:00")
+
     def __parse_description(self) -> str:
         return self.soup.find("p").text
 
     def __parse_start_date(self) -> datetime:
-        scrubbed_date = self.__talk_metadata["start"].replace(".", "").replace(",", "")
+        scrubbed_date = self.__scrub_date(self.__talk_metadata["start"])
         scrubbed_date = self.__scrub_german_locales(scrubbed_date)
 
         try:
@@ -40,7 +43,10 @@ class RC3TalkParser():
             try:
                 start_date = datetime.datetime.strptime(scrubbed_date, '%b %d %Y %-I:%M %p')
             except:
-                start_date = datetime.datetime.strptime(scrubbed_date, '%d %B %Y %H:%M')
+                try:
+                    start_date = datetime.datetime.strptime(scrubbed_date, '%d %B %Y %H:%M')
+                except:
+                    start_date = datetime.datetime.strptime(scrubbed_date, '%b %d %Y %H:%M')
 
         start_date = pytz.utc.localize(start_date)
         start_date = start_date.replace(tzinfo=self.TIME_ZONE)
