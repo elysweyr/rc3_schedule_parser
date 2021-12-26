@@ -61,7 +61,7 @@ class RC3TalkParser():
         return self.__talk_metadata["language"]
 
     def __parse_speakers(self) -> str:
-        return self.__talk_metadata["speakers"]
+        return self.__talk_metadata["speakers"] if len(self.__talk_metadata["speakers"]) > 0 else "No speakers specified"
 
     def __parse_join_url(self) -> str:
         return self.soup.find("a").text
