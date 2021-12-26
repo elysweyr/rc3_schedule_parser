@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 
 import discord
 
@@ -23,5 +24,6 @@ def render_embed(rc3_talk: RC3Talk, username: str):
     return embed
 
 
-def string_to_hex(string):  # int(rc3_talk.room, 16)
-    return int(string.encode("utf-8").hex()[:6], 16)
+def string_to_hex(string):
+    hashed_string = hashlib.md5(string.encode('utf-8')).hexdigest()
+    return int(hashed_string.encode("utf-8").hex()[:6], 16)

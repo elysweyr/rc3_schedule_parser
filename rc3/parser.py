@@ -75,7 +75,7 @@ class RC3TalkParser():
     def __parse_track(self) -> str:
         return self.__talk_metadata["track"]
 
-    def __get_rc3_talk(self, soup: BeautifulSoup) -> str:
+    def __get_rc3_talk(self) -> str:
         self.init_talk_metadata()
 
         title = self.__parse_title()
@@ -99,7 +99,7 @@ class RC3TalkParser():
         if not self.__init_succeeded:
             return None
 
-        return self.__get_rc3_talk(self.soup)
+        return self.__get_rc3_talk()
 
     def init_talk_metadata(self):
         table_values = self.soup.find_all(["dt", "dd"])
@@ -114,8 +114,8 @@ class RC3TalkParser():
     async def __init_parser(self):
         session = AsyncHTMLSession()
         page = await session.get(self.url, headers={
-            "Accept-Language": "en",
-            "Content-Language": "en"
+            "Accept-Language": "de",
+            "Content-Language": "de"
         })
         await page.html.arender()
 

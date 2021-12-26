@@ -23,4 +23,5 @@ class RC3EmbedBot(discord.Client):
 
             await message.channel.send(embed=embed)
             await message.channel.send(file=ical)
-            await message.delete()
+            if message.channel.type == discord.ChannelType.text:
+                await message.delete()
